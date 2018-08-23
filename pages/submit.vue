@@ -1,13 +1,14 @@
 <template>
     <div>
         <!-- {{form}} -->
+          <v-form v-model="valid">
         <div v-for="(item, index) in form" :key="item.tag">
-            {{item.tag}}
             <div v-if="item.type === 'INPUT'">
                 <v-text-field
                 id="testing"
                 name="input-1"
                 :label="item.text"
+                :rules="item.required? [v => !!v || '这个字段是必须的'] : []"
                 v-model="data[item.tag]"
                 ></v-text-field>
             </div>
@@ -21,6 +22,8 @@
                     :items="item.choices"
                     v-model="data[item.tag]"
                     :label="item.text"
+                    :rules="item.required? [v => !!v || '这个字段是必须的'] : []"
+                    item-value="tag"
                     single-line
                     ></v-select>
                 </div>
@@ -31,7 +34,7 @@
                         :items="item.choices"
                         v-model="data[item.tag]"
                         :label="item.text"
-                        @change="log()"
+                        :rules="item.required? [v => !!v || '这个字段是必须的', v => v.length<=item.available_cnt || '选择了过多的选项'] : []"
                         multiple
                         max-height="400"
                         hint="Pick your favorite states"
@@ -72,6 +75,7 @@
             </div>
             <div v-if="item.type==='BOX'">
                 <v-text-field
+                :rules="item.required? [v => !!v || '这个字段是必须的'] : []"
                 v-model="data[item.tag]"
                 id="testing"
                 name="input-1"
@@ -80,6 +84,7 @@
             </div>
             <div v-if="item.type==='TEXTAREA'">
                 <v-textarea
+                    :rules="item.required? [v => !!v || '这个字段是必须的'] : []"
                     v-model="data[item.tag]"
                     auto-grow
                     :label="item.text"
@@ -94,6 +99,7 @@
             </div>
         </div>
          <v-btn color="success" @click="submit()">提交</v-btn>
+         </v-form>
     </div>
 </template>
 
@@ -133,13 +139,26 @@ const dfs = (rootTag, formMap) => {
 };
 
 export default {
+    layout: 'schedule',    
     async asyncData(context) {
         const { uid } = context.query;
         const { data } = (await axios.get(
-            "http://101.132.66.238/api/v1/ssr/form?uid=Hfhlx4ejXps04qkKA3gXmezlvypBvkeamlnp9CNrTzw"
+            `http://101.132.66.238/api/v1/ssr/form?uid=${uid}`
         )).data;
         const root_tag = data.root_tag;
-        const formList = JSON.parse(data.data);
+        let formList = (JSON.parse(data.data)).map((item) => {
+            const rule = []
+            if(item.required) {
+                rule.push(v => !!v || '这个字段是必须的')
+                // console.log(1)
+            }
+            // if(item.re) {
+            //     rule.push(v => (new RegExp(item.Re)).test(v) || '当前输入不符合')
+            //     // console.log(2)
+            // }
+            return {...item, rule: rule}
+        })
+        // console.log(formList)
         let root = {};
         const formMap = new Map();
         formList.forEach((item, index) => {
@@ -154,6 +173,11 @@ export default {
     },
     data() {
         return {
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => v.length <= 10 || 'Name must be less than 10 characters'
+            ],
+            valid: false,
             e1: "",
             e6: "",
             bio: "",
@@ -165,7 +189,13 @@ export default {
             console.log(this.e6)
         },
         submit() {
-            console.log(this.data)
+            console.log(this.data.map((item) => {
+                if(item instanceof Array) {
+                    return item
+                } else {
+                    return [item]
+                }
+            }))
         }
     }
 };
