@@ -47,6 +47,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 
 export default {
+    layout: 'schedule',
     async asyncData (context) {
         // console.log(context)
         // console.log(context.query)
