@@ -95,15 +95,15 @@
                 <div v-for="(item, index) in form" :key="item.tag">
                     <div v-if="item.type === 'INPUT'">
                         <v-text-field
-                        id="testing"
                         name="input-1"
                         :label="item.text"
                         :rules="item.required? [v => !!v || '这个字段是必须的'] : []"
                         v-model="data[item.tag]"
                         ></v-text-field>
                     </div>
+                        <!-- {{item.type}} -->
                     <div v-if="item.type === 'TEXT'">
-                        {{item.text}}
+                        <p class="text">{{item.text}}</p>
                     </div>
                     <div v-if="item.type === 'SELECT'">
                         <div v-if="item.available_cnt === 1">
@@ -134,14 +134,24 @@
                                     <!-- Render Choice -->
                                     <div v-for="(cur, index) in item.choices" :key="index">
                                         <div v-if=" data[item.tag] && data[item.tag].indexOf(cur.tag) != -1">
+                                            <p class="subtext">{{cur.text}}</p>
                                             <div v-for="(subItem, index1) in cur.child">
                                                 <div v-if="subItem.type==='BOX'">
-                                                    <v-text-field
-                                                    id="testing"
-                                                    name="input-1"
-                                                    :label="`Box ${subItem.text}`"
-                                                    v-model="data[subItem.tag]"
-                                                    ></v-text-field>
+                                                    <div class="box">
+                                                        <div class="input">
+                                                            <v-text-field
+                                                            id="testing"
+                                                            name="input-1"
+                                                            :label="`Box ${subItem.text}`"
+                                                            v-model="data[subItem.tag]"
+                                                            ></v-text-field>
+                                                        </div>
+                                                        <div class="button">
+                                                            <a href="https://box.zjuqsc.com" target="_blank">求是潮Box</a>
+                                                            <img src="~/assets/box.svg" alt="">
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <div v-if="subItem.type==='TEXTAREA'">
                                                     <v-textarea
@@ -163,7 +173,21 @@
                         </div>
                     </div>
                     <div v-if="item.type==='UPLOAD'">
-                        {{item.text}} <input type="file" @change="fileSelected($event, item.tag)">
+                        <div class="upload">
+                            <div class="input">
+                                <v-text-field
+                                @click.native="callUpload(item.tag)"
+                                readonly
+                                name="input-1"
+                                :label="item.text"
+                                v-model="fileListMap[item.tag]"
+                                ></v-text-field>
+                            </div>
+
+                            <div @click="callUpload(item.tag)" class="label">
+                                <div>点击上传</div>
+                            </div>
+                        </div>
                     </div>
                     <div v-if="item.type==='BOX'">
                         <v-text-field
@@ -198,6 +222,7 @@
             <a style="color: #64ACF9" href="https://www.qsc.zju.edu.cn" target="_blank">求是潮网站</a>
             </p>
         </footer>
+        <input ref="fileInput" style="display: none;" type="file" @change="fileSelected($event)">
     </div>
 </template>
 
@@ -207,13 +232,15 @@ import moment from "moment";
 import UploadButton from '../components/uploadBtn';
 
 const dfs = (rootTag, formMap) => {
+    // console.log(rootTag)
     const renderList = [];
     const root = formMap.get(rootTag);
-    let next = root.next;
-    while (next != -1) {
-        const cur = next;
+    // let next = root.next;
+    let cur = rootTag
+    while (cur != -1) {
+        // const cur = next;
         let curForm = formMap.get(cur);
-        next = curForm.next;
+        // next = curForm.next;
         // console.log(curForm)
         if (curForm.type === "SELECT" && !curForm.default_jump && curForm.choices.length ) {
             // jump
@@ -233,6 +260,7 @@ const dfs = (rootTag, formMap) => {
             }
         }
         renderList.push(curForm);
+        cur = curForm.next
     }
     return renderList
 };
@@ -280,6 +308,7 @@ export default {
             // console.log(root_tag);
 
             const renderList = dfs(root_tag, formMap);
+            // console.log(renderList)
             // console.log(renderList[renderList.length - 1].choices[0].child);
             // console.log()
             return { form: renderList, snackbar: false, error: false };
@@ -304,20 +333,35 @@ export default {
             loading: false,
             submiterror: false,
             errorMsg: '',
+            hhh1: '',
+            filecurTag: '',
+            fileListMap: [],
         };
     },
     mounted() {
         const instanceId = this.$route.query.instanceId
         const store = window.localStorage.getItem(`instance${instanceId}`)
         if(store) {
-            this.data = JSON.parse(store)
+            const cur = JSON.parse(store)
+            cur.forEach((item, index) => {
+                if(item) {
+                    this.data[index] = item
+                }
+            })
         }
         // this.data = window.
     },
     methods: {
-        async fileSelected(e, tag) {
+        callUpload(tag) {
+            // console.log(this.$refs.fileInput)
+            this.filecurTag = tag
+            // console.log(this.filecurTag)
+            this.$refs.fileInput.click()
+        },
+        async fileSelected(e) {
             // console.log(e.target.files[0])
-            this.submitFile(e.target.files[0], tag)
+            console.log(e.target.files[0])
+            this.submitFile(e.target.files[0], this.filecurTag)
         },
         log() {
             console.log(this.e6)
@@ -336,6 +380,9 @@ export default {
                     throw res.data
                 }
                 this.data[tag] = (res.data).data
+                // this.fileListMap[tag] = file.name
+                this.$set(this.fileListMap, tag, file.name)
+                // console.log([tag])
                 console.log(this.data)
                 return
             } catch (error) {
@@ -389,6 +436,73 @@ export default {
 </script>
 
 <style lang="less">
+.upload {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .input {
+        width: 100%;
+        padding-right: 20px;
+        input {
+            cursor: default !important;
+        }
+    }
+    .label {
+        // display: inline;
+        width: 114px;
+        height: 37px;
+        background-color: #4E9BEE;
+        text-decoration: none;
+        color: #FFF;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.box {
+    display: flex;
+    justify-content: space-between;
+    .input {
+        padding-right: 20px;
+        width: 100%;
+    }
+    .button {
+        width: 140px;
+        display: flex;
+        align-items: center;
+        a {
+            width: 100px;
+            display: block;
+            flex-grow: 1;
+            background-color: #4E9BEE;
+            text-decoration: none;
+            color: #FFF;
+            padding: 9px 11px 11px 11px;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            height: 40px;
+        }
+        img {
+            height: 40px;
+        }
+    }
+}
+.text {
+    font-weight: 600;
+    font-size: 22px;
+    padding: 24px 0px;
+    display: flex;
+}
+.subtext {
+    font-weight: 600;
+    font-size: 19px;
+    padding: 20px 0px 0px 0px;
+
+}
 .submitted-container {
     img {
         height: 200px;
@@ -438,8 +552,8 @@ main {
     box-shadow: #9a9a9a 0 0 20px 1px;
     border-radius: 5px;
     margin-top: 20px;
-    padding-top: 20px;
-    padding: 20px;
+    padding-top: 10px !important;
+    padding: 25px;
     .submit {
         margin-top: 30px;
         display: flex;
