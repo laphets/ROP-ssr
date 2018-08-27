@@ -96,7 +96,7 @@
                     <div v-if="item.type === 'INPUT'">
                         <v-text-field
                         name="input-1"
-                        :label="item.text"
+                        :label="`${item.text}${item.required ? '': '(选填)'}`"
                         :rules="item.required? [v => !!v || '这个字段是必须的'] : []"
                         v-model="data[item.tag]"
                         ></v-text-field>
@@ -140,9 +140,8 @@
                                                     <div class="box">
                                                         <div class="input">
                                                             <v-text-field
-                                                            id="testing"
                                                             name="input-1"
-                                                            :label="`Box ${subItem.text}`"
+                                                            :label="`${subItem.text}${subItem.required ? '': '(选填)'}`"
                                                             v-model="data[subItem.tag]"
                                                             ></v-text-field>
                                                         </div>
@@ -157,7 +156,7 @@
                                                     <v-textarea
                                                         v-model="data[subItem.tag]"
                                                         auto-grow
-                                                        :label="subItem.text"
+                                                        :label="`${subItem.text}${subItem.required ? '': '(选填)'}`"
                                                         rows="3"
                                                     ></v-textarea>
                                                 </div>
@@ -178,8 +177,7 @@
                                 <v-text-field
                                 @click.native="callUpload(item.tag)"
                                 readonly
-                                name="input-1"
-                                :label="item.text"
+                                :label="`${item.text}${item.required ? '': '(选填)'}`"
                                 v-model="fileListMap[item.tag]"
                                 ></v-text-field>
                             </div>
@@ -195,7 +193,7 @@
                         v-model="data[item.tag]"
                         id="testing"
                         name="input-1"
-                        :label="`Box ${item.text}`"
+                        :label="`${item.text}${subItem.required ? '': '(选填)'}`"
                         ></v-text-field>
                     </div>
                     <div v-if="item.type==='TEXTAREA'">
@@ -203,7 +201,7 @@
                             :rules="item.required? [v => !!v || '这个字段是必须的'] : []"
                             v-model="data[item.tag]"
                             auto-grow
-                            :label="item.text"
+                            :label="`${item.text}${item.required ? '': '(选填)'}`"
                             rows="3"
                         ></v-textarea>
                     </div>
@@ -228,6 +226,7 @@
 
 <script>
 import axios from "axios";
+import request from '../plugins/axios'
 import moment from "moment";
 import UploadButton from '../components/uploadBtn';
 
@@ -282,8 +281,8 @@ export default {
         try {
             const { instanceId } = context.query
             // console.log(instanceId)
-            const { data } = (await axios.get(
-                `http://localhost:3000/v1/ssr/form?instanceId=${instanceId}`
+            const { data } = (await request.get(
+                `/v1/ssr/form?instanceId=${instanceId}`
             )).data;
             const root_tag = data.root_tag;
             let formList = (JSON.parse(data.data)).map((item) => {
@@ -375,7 +374,7 @@ export default {
                         'Content-Type': 'multipart/form-data'
                     }
                 }
-                const res = await axios.post(`http://localhost:3000/v1/file/upload/img`, formData, config)
+                const res = await request.post(`/v1/file/upload/img`, formData, config)
                 if (((res.data).code) != 0) {
                     throw res.data
                 }
@@ -415,7 +414,7 @@ export default {
                         }
                     }
                     const instanceId = this.$route.query.instanceId
-                    const res = await axios.post(`http://localhost:3000/v1/freshman/submit?instanceId=${instanceId}`, {data: real})
+                    const res = await request.post(`/v1/freshman/submit?instanceId=${instanceId}`, {data: real})
                     if (((res.data).code) != 0) {
                         throw res.data
                     }
@@ -494,7 +493,7 @@ export default {
 .text {
     font-weight: 600;
     font-size: 22px;
-    padding: 24px 0px;
+    padding: 24px 0px 16px 0px;
     display: flex;
 }
 .subtext {
