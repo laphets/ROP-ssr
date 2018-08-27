@@ -1,0 +1,7 @@
+{
+    "apps": [{
+        "name": "rop-ssr",
+        "script": "npm",
+        "args": "start"
+    }]
+}
