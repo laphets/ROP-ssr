@@ -123,9 +123,12 @@
                                 <v-select
                                 :items="item.choices"
                                 v-model="data[item.tag]"
-                                :label="item.text"
+                                :label="`${item.text}(最多选${item.available_cnt}个)`"
                                 :rules="item.required? [v => !!v || '这个字段是必须的', v => v.length<=item.available_cnt || '选择了过多的选项'] : []"
+                                @change="selectChange($event, item.available_cnt)"
                                 multiple
+                                chips
+                                :item-disabled="[1]"
                                 max-height="400"
                                 item-value="tag"
                                 persistent-hint
@@ -136,6 +139,7 @@
                                         <div v-if=" data[item.tag] && data[item.tag].indexOf(cur.tag) != -1">
                                             <p class="subtext">{{cur.text}}</p>
                                             <div v-for="(subItem, index1) in cur.child">
+
                                                 <div v-if="subItem.type==='BOX'">
                                                     <div class="box">
                                                         <div class="input">
@@ -150,8 +154,8 @@
                                                             <img src="~/assets/box.svg" alt="">
                                                         </div>
                                                     </div>
-
                                                 </div>
+
                                                 <div v-if="subItem.type==='TEXTAREA'">
                                                     <v-textarea
                                                         v-model="data[subItem.tag]"
@@ -351,6 +355,13 @@ export default {
         // this.data = window.
     },
     methods: {
+        selectChange(e, choiceLimit) {
+            // console.log(this.data[tag])
+            // console.log(e, choiceLimit)
+            if(e.length>choiceLimit) {
+                e.pop()
+            }
+        },
         callUpload(tag) {
             // console.log(this.$refs.fileInput)
             this.filecurTag = tag
@@ -389,6 +400,9 @@ export default {
                 this.submiterror = true
                 return Promise.reject(error)
             }
+
+        },
+        clearMulti() {
 
         },
         async submit() {
