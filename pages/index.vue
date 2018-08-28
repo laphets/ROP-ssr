@@ -125,7 +125,7 @@
                                 v-model="data[item.tag]"
                                 :label="`${item.text}(最多选${item.available_cnt}个)`"
                                 :rules="item.required? [v => !!v || '这个字段是必须的', v => v.length<=item.available_cnt || '选择了过多的选项'] : []"
-                                @change="selectChange($event, item.available_cnt)"
+                                @change="selectChange($event, item.tag, item.available_cnt)"
                                 multiple
                                 chips
                                 :item-disabled="[1]"
@@ -356,11 +356,13 @@ export default {
         // this.data = window.
     },
     methods: {
-        selectChange(e, choiceLimit) {
+        selectChange(e, tag, choiceLimit) {
+            
             // console.log(this.data[tag])
             // console.log(e, choiceLimit)
             if(e.length>choiceLimit) {
                 e.pop()
+                console.log(this.data[tag])
             }
         },
         callUpload(tag) {
