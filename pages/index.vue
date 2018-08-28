@@ -284,9 +284,10 @@ export default {
     async asyncData(context) {
         try {
             const { instanceId } = context.query
+            // console.log("instanceId")
             // console.log(instanceId)
             const { data } = (await request.get(
-                `/v1/ssr/form?instanceId=${instanceId}`
+                `/v1/ssr/form?instanceId=${instanceId || 1}`
             )).data;
             const root_tag = data.root_tag;
             let formList = (JSON.parse(data.data)).map((item) => {
