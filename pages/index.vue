@@ -125,7 +125,6 @@
                                 v-model="data[item.tag]"
                                 :label="`${item.text}(最多选${item.available_cnt}个)`"
                                 :rules="item.required? [v => !!v || '这个字段是必须的', v => v.length<=item.available_cnt || '选择了过多的选项'] : []"
-                                @change="selectChange($event, item.tag, item.available_cnt)"
                                 multiple
                                 chips
                                 :item-disabled="[1]"
@@ -158,6 +157,7 @@
 
                                                 <div v-if="subItem.type==='TEXTAREA'">
                                                     <v-textarea
+                                                        :title="subItem.text"
                                                         v-model="data[subItem.tag]"
                                                         auto-grow
                                                         :label="`${subItem.text}${subItem.required ? '': '(选填)'}`"
@@ -430,7 +430,7 @@ export default {
                             })
                         }
                     }
-                    const instanceId = this.$route.query.instanceId
+                    const instanceId = this.$route.query.instanceId || 1
                     const res = await request.post(`/v1/freshman/submit?instanceId=${instanceId}`, {data: real})
                     if (((res.data).code) != 0) {
                         throw res.data
