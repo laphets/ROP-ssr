@@ -1,20 +1,20 @@
 
 module.exports = {
   env: {
-    baseUrl: process.env.NODE_ENV === 'production' ? 'https://rop.zjuqsc.com/api' : 'http://localhost:3000',
+    baseUrl: process.env.NODE_ENV === 'production' ? 'https://rop.zjuqsc.com/api' : 'https://rop.zjuqsc.com/api',
   },
   /*
   ** Headers of the page
   */
   head: {
-    title: 'rop-ssr1',
+    title: '求是潮纳新开放平台',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js + Vuetify.js project' }
+      { hid: 'description', name: 'description', content: 'QSC ROP' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/logo.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
