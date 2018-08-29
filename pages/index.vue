@@ -156,11 +156,14 @@
                                                 </div>
 
                                                 <div v-if="subItem.type==='TEXTAREA'">
+                                                    <div class="textarea-title">
+                                                        {{`${subItem.text}${subItem.required ? '': '(选填)'}`}}
+                                                    </div>
                                                     <v-textarea
                                                         :title="subItem.text"
                                                         v-model="data[subItem.tag]"
                                                         auto-grow
-                                                        :label="`${subItem.text}${subItem.required ? '': '(选填)'}`"
+                                                        
                                                         rows="3"
                                                     ></v-textarea>
                                                 </div>
@@ -195,7 +198,6 @@
                         <v-text-field
                         :rules="item.required? [v => !!v || '这个字段是必须的'] : []"
                         v-model="data[item.tag]"
-                        id="testing"
                         name="input-1"
                         :label="`${item.text}${subItem.required ? '': '(选填)'}`"
                         ></v-text-field>
@@ -343,7 +345,7 @@ export default {
         };
     },
     mounted() {
-        const instanceId = this.$route.query.instanceId
+        const instanceId = this.$route.query.instanceId || 1
         const store = window.localStorage.getItem(`instance${instanceId}`)
         if(store) {
             const cur = JSON.parse(store)
@@ -452,6 +454,11 @@ export default {
 </script>
 
 <style lang="less">
+.textarea-title {
+    margin-top: 10px;
+    margin-bottom: -20px;
+    font-size: 15px;
+}
 .upload {
     display: flex;
     justify-content: space-around;
