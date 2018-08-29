@@ -123,7 +123,7 @@
                                 <v-select
                                 :items="item.choices"
                                 v-model="data[item.tag]"
-                                :label="`${item.text}(最多选${item.available_cnt}个)`"
+                                :label="`${item.text}(最多${item.available_cnt}项)`"
                                 :rules="item.required? [v => !!v || '这个字段是必须的', v => v.length<=item.available_cnt || '选择了过多的选项'] : []"
                                 multiple
                                 chips
@@ -235,6 +235,8 @@ import request from '../plugins/axios'
 import moment from "moment";
 import UploadButton from '../components/uploadBtn';
 
+import { AESEncrypto } from '../plugins/encrypt'
+
 const dfs = (rootTag, formMap) => {
     // console.log(rootTag)
     const renderList = [];
@@ -290,6 +292,7 @@ export default {
             const { data } = (await request.get(
                 `/v1/ssr/form?instanceId=${instanceId || 1}`
             )).data;
+
             const root_tag = data.root_tag;
             let formList = (JSON.parse(data.data)).map((item) => {
                 const rule = []
@@ -412,6 +415,7 @@ export default {
         async submit() {
             if(this.valid) {
                 try {
+                    console.log(111)
                     this.loading = true
                     const submitData = this.data.map((item) => {
                         if(item instanceof Array) {
@@ -426,11 +430,12 @@ export default {
                     for(let x in submitData) {
                         if(submitData[x]) {
                             real.push({
-                                key: ~~x,
-                                value: submitData[x]
+                                key: AESEncrypto(`${~~x}`),
+                                value: (submitData[x]).map(item => AESEncrypto(item))
                             })
                         }
                     }
+                    console.log(real)
                     const instanceId = this.$route.query.instanceId || 1
                     const res = await request.post(`/v1/freshman/submit?instanceId=${instanceId}`, {data: real})
                     if (((res.data).code) != 0) {
@@ -440,6 +445,7 @@ export default {
                     this.loading = false;
                     this.submitted = true;
                 } catch (error) {
+                    console.log(error)
                     this.loading = false;
                     this.errorMsg = error.data
                     this.submiterror = true
