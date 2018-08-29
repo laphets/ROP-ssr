@@ -8,7 +8,7 @@ export const AESEncrypto = (str, key = "a263e73bd9083ae6") => {
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7
     });
-    return encrypted.ciphertext.toString(CryptoJS.enc.Hex);
+    return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
 }
 
 const PaddingLeft = (key, length) => {

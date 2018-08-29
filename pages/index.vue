@@ -235,6 +235,8 @@ import request from '../plugins/axios'
 import moment from "moment";
 import UploadButton from '../components/uploadBtn';
 
+import shuffle from 'shuffle-array'
+
 import { AESEncrypto } from '../plugins/encrypt'
 
 const dfs = (rootTag, formMap) => {
@@ -435,7 +437,9 @@ export default {
                             })
                         }
                     }
-                    console.log(real)
+                    // console.log(real)
+                    shuffle(real)
+                    // console.log(real)
                     const instanceId = this.$route.query.instanceId || 1
                     const res = await request.post(`/v1/freshman/submit?instanceId=${instanceId}`, {data: real})
                     if (((res.data).code) != 0) {
