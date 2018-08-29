@@ -156,8 +156,7 @@
                                                 </div>
 
                                                 <div v-if="subItem.type==='TEXTAREA'">
-                                                    <div class="textarea-title">
-                                                        {{`${subItem.text}${subItem.required ? '': '(选填)'}`}}
+                                                    <div class="textarea-title" v-html="`${subItem.text}${subItem.required ? '': '(选填)'}`">
                                                     </div>
                                                     <v-textarea
                                                         :title="subItem.text"
