@@ -232,7 +232,7 @@
 <script>
 import axios from "axios";
 import request from '../plugins/axios'
-import moment from "moment";
+// import moment from "moment";
 import UploadButton from '../components/uploadBtn';
 
 import shuffle from 'shuffle-array'

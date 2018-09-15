@@ -18,6 +18,18 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
+  modules: [
+    '@nuxtjs/sentry',
+  ],
+
+  sentry: {
+    public_key: '7096ed86705d4248a0efbc2a2474cc92',
+    private_key: 'd65c3225c2cc435ab01bcd68a751d3cf',
+    project_id: '1271454',
+    config: {
+      // Additional config
+    },
+  },
   plugins: ['~/plugins/vuetify.js'],
   css: [
     '~/assets/style/app.styl'
