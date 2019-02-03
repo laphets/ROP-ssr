@@ -292,7 +292,7 @@ export default {
             // console.log("instanceId")
             // console.log(instanceId)
             const { data } = (await request.get(
-                `/v1/ssr/form?instanceId=${instanceId || 1}`
+                `/v1/ssr/form?instanceId=${instanceId}`
             )).data;
 
             const root_tag = data.root_tag;
@@ -440,7 +440,7 @@ export default {
                     // console.log(real)
                     shuffle(real)
                     // console.log(real)
-                    const instanceId = this.$route.query.instanceId || 1
+                    const instanceId = this.$route.query.instanceId
                     const res = await request.post(`/v1/freshman/submit?instanceId=${instanceId}`, {data: real})
                     if (((res.data).code) != 0) {
                         throw res.data
