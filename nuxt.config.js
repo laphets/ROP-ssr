@@ -1,7 +1,7 @@
 
 module.exports = {
   env: {
-    baseUrl: process.env.NODE_ENV === 'production' ? 'https://rop.zjuqsc.com/api' : 'https://rop.zjuqsc.com/api',
+    baseUrl: 'https://rop.zjuqsc.com/api',
   },
   /*
   ** Headers of the page

@@ -43,6 +43,7 @@
 
 <script>
 import axios from 'axios'
+import request from '../plugins/axios'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
@@ -53,7 +54,7 @@ export default {
         // console.log(context.query)
         const { uid } = context.query
         // console.log(this)
-        const { data } = ((await axios.get(`http://192.168.199.211:3000/v1/ssr/schedule?uid=${uid}`)).data)
+        const { data } = ((await request.get(`/v1/ssr/schedule?uid=${uid}`)).data)
         return { instance: data }
     },
     data() {
@@ -73,7 +74,7 @@ export default {
             console.log(intent_id)
         },
         async submit(intent_id) {
-            await axios.post(`http://192.168.199.211:3000/v1/ssr/join/${this.radioSelectList[intent_id]}`, {
+            await request.post(`/v1/ssr/join/${this.radioSelectList[intent_id]}`, {
                 intents: [intent_id]
             })
             // console.log(this.radioSelectList[intent_id])
