@@ -4,9 +4,12 @@
             <v-flex xs12 sm6 offset-sm3>
             <v-card>
                 <v-card-title primary-title>
-                <div>
+                <div v-if="(instance.intent_groups).length">
                     <h3 class="headline mb-0">{{instance.name}}同学您好:</h3>
                     <div>接下来请您为您的每个志愿选择一个合适的时间段参加面试~</div>
+                </div>
+                <div v-else>
+                    <h3 class="headline mb-0">Oops 页面已失效</h3>                    
                 </div>
                 </v-card-title>
             </v-card>
@@ -71,7 +74,7 @@
         v-model="snackbar"
         :color="color"
         multi-line="multi-line"
-        timeout="6000"
+        :timeout="5000"
         vertical="vertical"
         >
             {{ snackbarText }}
