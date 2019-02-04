@@ -123,7 +123,7 @@ export default {
             console.log(intent_id)
         },
         async submit(intent_id) {
-            this.dialog = true
+            // this.dialog = true
             try {
                 const res = (await request.post(`/v1/ssr/join/${this.radioSelectList[intent_id]}`, {
                     intents: [intent_id]
