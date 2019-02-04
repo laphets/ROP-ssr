@@ -81,9 +81,10 @@
 
         <header>
             <div class="header-container">
-                <h1>求是潮秋纳<br>报名表</h1>
+                <h1>{{instanceData.name}}<br>报名表</h1>
                 <div class="sub-title">
-                    2018 QSC AUTUMN RECRUIT
+                    <!-- {{instanceData.remark}} - {{instanceData.association}} -->
+                    截止时间:{{prase_time(instanceData.end_time)}}
                 </div>
             </div>
             <img src="~/assets/logo.svg" alt="head logo">
@@ -234,6 +235,8 @@ import axios from "axios";
 import request from '../plugins/axios'
 // import moment from "moment";
 import UploadButton from '../components/uploadBtn';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
 
 import shuffle from 'shuffle-array'
 
@@ -295,6 +298,13 @@ export default {
                 `/v1/ssr/form?instanceId=${instanceId}`
             )).data;
 
+            const { data: instanceList } = (await request.get('/v1/ssr/instance')).data
+            let instanceData = null;
+            instanceList.forEach((item) => {
+                if(item.ID == instanceId)
+                    instanceData = item;
+            })
+
             const root_tag = data.root_tag;
             let formList = (JSON.parse(data.data)).map((item) => {
                 const rule = []
@@ -321,7 +331,7 @@ export default {
             // console.log(renderList)
             // console.log(renderList[renderList.length - 1].choices[0].child);
             // console.log()
-            return { form: renderList, snackbar: false, error: false };
+            return { form: renderList, snackbar: false, error: false, instanceData };
         } catch(error) {
             console.log(error)
             return {snackbar: true, error: true, form: []}
@@ -362,6 +372,9 @@ export default {
         // this.data = window.
     },
     methods: {
+        prase_time(time) {
+            return moment(new Date(time)).format('LLL')
+        },
         selectChange(e, tag, choiceLimit) {
             
             // console.log(this.data[tag])
