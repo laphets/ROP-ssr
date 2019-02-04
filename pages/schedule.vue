@@ -6,7 +6,7 @@
                 <v-card-title primary-title>
                 <div>
                     <h3 class="headline mb-0">{{instance.name}}同学您好:</h3>
-                    <div>接下来希望你能够为你的每个志愿选择一个你认为合适的时间段参加面试~</div>
+                    <div>接下来请您为您的每个志愿选择一个合适的时间段参加面试~</div>
                 </div>
                 </v-card-title>
             </v-card>
@@ -37,7 +37,52 @@
             </v-flex>
         </v-layout>
 
+        <v-dialog
+            v-model="dialog"
+            width="500"
+            >
+            <v-card>
+                <v-card-title
+                class="headline grey lighten-2"
+                primary-title
+                >
+                面试须知
+                </v-card-title>
 
+                <v-card-text>
+                请在对应面试开始时间15分钟前到达相应场地参与面试
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="primary"
+                    flat
+                    @click="dialog = false"
+                >
+                    我同意
+                </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-snackbar
+        v-model="snackbar"
+        :color="color"
+        multi-line="multi-line"
+        timeout="6000"
+        vertical="vertical"
+        >
+            {{ snackbarText }}
+            <v-btn
+                dark
+                flat
+                @click="snackbar = false"
+            >
+                关闭
+            </v-btn>
+        </v-snackbar>
     </section>
 </template>
 
@@ -61,6 +106,10 @@ export default {
         return {
             radioSelectList: ['1'],
             a: 1,
+            dialog: false,
+            snackbar: false,
+            snackbarText: '',
+            color: 'success',
         }
     },
     created() {
@@ -74,9 +123,23 @@ export default {
             console.log(intent_id)
         },
         async submit(intent_id) {
-            await request.post(`/v1/ssr/join/${this.radioSelectList[intent_id]}`, {
-                intents: [intent_id]
-            })
+            this.dialog = true
+            try {
+                const res = (await request.post(`/v1/ssr/join/${this.radioSelectList[intent_id]}`, {
+                    intents: [intent_id]
+                })).data
+                if(res.code != 0) {
+                    throw res.data
+                }
+                this.color = 'success';
+                this.snackbarText = '面试时间确认成功~'
+                this.snackbar = true;
+            } catch (error) {
+                this.color = 'error';
+                this.snackbarText = `面试时间确认失败: ${error}`
+                this.snackbar = true;
+            }
+
             // console.log(this.radioSelectList[intent_id])
         },
         change(e) {

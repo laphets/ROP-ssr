@@ -42,7 +42,7 @@
       </v-container>
     </v-content>
     <v-footer :fixed="fixed" app>
-      <span>&nbsp &copy; 2018 求是潮技术研发中心</span>
+      <span>&nbsp &copy; 2019 求是潮技术研发中心</span>
     </v-footer>
   </v-app>
 </template>
@@ -62,7 +62,7 @@
         miniVariant: false,
         right: true,
         rightDrawer: false,
-        title: '求是潮纳新开放平台'
+        title: '求是潮纳新开放平台',
       }
     }
   }
