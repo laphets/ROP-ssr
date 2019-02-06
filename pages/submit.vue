@@ -391,8 +391,6 @@ export default {
             this.$refs.fileInput.click()
         },
         async fileSelected(e) {
-            // console.log(e.target.files[0])
-            console.log(e.target.files[0])
             this.submitFile(e.target.files[0], this.filecurTag)
         },
         log() {
