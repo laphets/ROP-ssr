@@ -7,7 +7,7 @@
         :timeout="3000"
         :bottom="true"
         >
-        表单加载出现问题了呢~ 请刷新或确认地址无误后重试
+        {{`${errmsg || '表单加载出现问题了呢~ 请刷新或确认地址无误后重试'}`}}
         <v-btn
             color="pink"
             flat
@@ -79,7 +79,7 @@
       </v-card>
     </v-dialog>
 
-        <header>
+        <header v-if="!error">
             <div class="header-container">
                 <h1>{{instanceData.name}}<br>报名表</h1>
                 <div class="sub-title">
@@ -294,9 +294,15 @@ export default {
             const { instanceId } = context.query
             // console.log("instanceId")
             // console.log(instanceId)
-            const { data } = (await request.get(
+            const res = (await request.get(
                 `/v1/ssr/form?instanceId=${instanceId}`
             )).data;
+
+            if ( res.code !== 0) {
+                throw res.message
+            }
+
+            const { data } = res;
 
             const { data: instanceList } = (await request.get('/v1/ssr/instance')).data
             let instanceData = null;
@@ -334,7 +340,7 @@ export default {
             return { form: renderList, snackbar: false, error: false, instanceData };
         } catch(error) {
             console.log(error)
-            return {snackbar: true, error: true, form: []}
+            return {snackbar: true, error: true, form: [], errmsg: error}
         }
 
     },
