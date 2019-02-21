@@ -303,7 +303,6 @@ export default {
             }
 
             const { data } = res;
-
             const { data: instanceList } = (await request.get('/v1/ssr/instance')).data
             let instanceData = null;
             instanceList.forEach((item) => {
@@ -337,7 +336,7 @@ export default {
             // console.log(renderList)
             // console.log(renderList[renderList.length - 1].choices[0].child);
             // console.log()
-            return { form: renderList, snackbar: false, error: false, instanceData };
+            return { form: renderList, snackbar: false, error: false, instanceData, errmsg: '' };
         } catch(error) {
             console.log(error)
             return {snackbar: true, error: true, form: [], errmsg: error}

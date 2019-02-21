@@ -19,7 +19,15 @@
             <v-card class="elevation-2">
                 <v-card-title class="headline">{{item.name}}</v-card-title>
                 <v-card-text>
-                    报名人数:{{item.freshman_count}}
+                    报名人数: {{item.freshman_count}}
+                    <br>
+                    备注: {{item.remark}}
+                    <br>
+                    最大志愿数: {{item.max_intent}}
+                    <br>
+                    状态: {{item.status}}
+                    <br>
+                    表单名: {{item.form_name}}
                 {{item}}
                 </v-card-text>
                 <v-card-actions>
