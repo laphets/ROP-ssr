@@ -28,7 +28,6 @@
                     状态: {{item.status}}
                     <br>
                     表单名: {{item.form_name}}
-                {{item}}
                 </v-card-text>
                 <v-card-actions>
                 <v-list-tile class="grow">
