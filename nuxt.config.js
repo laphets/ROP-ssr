@@ -24,9 +24,9 @@ module.exports = {
   ],
 
   sentry: {
-    public_key: '7096ed86705d4248a0efbc2a2474cc92',
-    private_key: 'd65c3225c2cc435ab01bcd68a751d3cf',
-    project_id: '1271454',
+    public_key: '81fdfb8356544d328d3e6a5bca6e534a',
+    private_key: '68f0afa8025a4c568f0f0a323abba1a3',
+    project_id: '2',
     config: {
       // Additional config
     },
