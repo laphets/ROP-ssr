@@ -44,7 +44,8 @@ module.exports = {
   */
   build: {
     vendor: [
-      '~/plugins/vuetify.js'
+      '~/plugins/vuetify.js',
+      'babel-polyfill'
     ],
     extractCSS: true,
     /*
