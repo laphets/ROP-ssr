@@ -129,7 +129,7 @@
                                 multiple
                                 chips
                                 :item-disabled="[1]"
-                                max-height="400"
+                                :menu-props="{maxHeight:'400'}"
                                 item-value="tag"
                                 persistent-hint
                                 ></v-select>
