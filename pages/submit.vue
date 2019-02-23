@@ -221,9 +221,9 @@
             <div>
             报名如有问题请及时与我们(<a style="color: #9A9A9A" href="mailto:tech@zjuqsc.com">tech@zjuqsc.com</a>)联系
             </div>
-            <p>©浙江大学求是潮 All rights reserved</p>
+            <p>求是潮纳新开放平台(ROP) ©浙江大学求是潮 All rights reserved</p>
             <p>
-            <a style="color: #64ACF9" href="https://www.qsc.zju.edu.cn" target="_blank">求是潮网站</a>
+            <a style="color: #64ACF9" href="https://www.qsc.zju.edu.cn" target="_blank">求是潮</a>
             </p>
         </footer>
         <input ref="fileInput" style="display: none;" type="file" @change="fileSelected($event)">
