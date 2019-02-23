@@ -26,7 +26,13 @@ html::before {
 .container {
     padding-top: 0px !important;
     max-width: 800px;
-    width: 90%;
+    @media (min-width: 300px) { 
+        width: 99%;
+    }
+    @media (min-width: 768px) {
+        width: 90%;
+    }
+
     margin-left: auto;
     margin-right: auto;
 }

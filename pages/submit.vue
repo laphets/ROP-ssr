@@ -163,9 +163,10 @@
                                                         :title="subItem.text"
                                                         v-model="data[subItem.tag]"
                                                         auto-grow
-                                                        
                                                         rows="3"
-                                                    ></v-textarea>
+                                                    >
+
+                                                    </v-textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -209,7 +210,9 @@
                             auto-grow
                             :label="`${item.text}${item.required ? '': '(选填)'}`"
                             rows="3"
-                        ></v-textarea>
+                        >
+
+                        </v-textarea>
                     </div>
                 </div>
                 <div class="submit">
@@ -572,7 +575,16 @@ header {
     border-bottom-right-radius: 5px;
     position: relative;
     .header-container {
-        margin: 25px 50px;
+        @media (min-width: 300px) { 
+            margin: 25px 20px;
+        }
+        @media (min-width: 500px) { 
+            margin: 25px 40px;
+        }
+        @media (min-width: 768px) {
+            margin: 25px 50px;
+        }
+        
         h1 {
             color: #212121;
             text-align: left;
