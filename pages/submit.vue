@@ -453,7 +453,7 @@ export default {
                         if(submitData[x]) {
                             real.push({
                                 key: AESEncrypto(`${~~x}`),
-                                value: (submitData[x]).map(item => AESEncrypto(item))
+                                value: (submitData[x]).map(item => AESEncrypto(item.replace(/\n/g,"<br>")))
                             })
                         }
                     }
