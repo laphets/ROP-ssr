@@ -224,9 +224,10 @@
             <div>
             报名如有问题请及时与我们(<a style="color: #9A9A9A" href="mailto:tech@zjuqsc.com">tech@zjuqsc.com</a>)联系
             </div>
-            <p>求是潮纳新开放平台(ROP) ©浙江大学求是潮 All rights reserved</p>
+            <p>求是潮纳新开放平台(Recruit Open Platform)</p>
+            <p>©浙江大学求是潮 All rights reserved</p>
             <p>
-            <a style="color: #64ACF9" href="https://www.qsc.zju.edu.cn" target="_blank">求是潮</a>
+            <a style="color: #64ACF9" href="https://www.qsc.zju.edu.cn" target="_blank">求是潮网站</a> &nbsp <a style="color: #64ACF9" href="mailto:laphets@zju.edu.cn" target="_blank">纳新系统接入</a>
             </p>
         </footer>
         <input ref="fileInput" style="display: none;" type="file" @change="fileSelected($event)">
@@ -575,6 +576,18 @@ header {
     border-bottom-right-radius: 5px;
     position: relative;
     .header-container {
+        h1 {
+            color: #212121;
+            text-align: left;
+            font-weight: 700;
+            @media screen and (max-width: 350px) {
+                font-size: 21px;
+            }
+            font-size: 25px;
+            line-height: 1.3;
+            letter-spacing: 5px;
+            white-space: nowrap;
+        }
         @media (min-width: 300px) { 
             margin: 25px 20px;
         }
@@ -585,15 +598,7 @@ header {
             margin: 25px 50px;
         }
         
-        h1 {
-            color: #212121;
-            text-align: left;
-            font-weight: 700;
-            font-size: 25px;
-            line-height: 1.3;
-            letter-spacing: 5px;
-            white-space: nowrap;
-        }
+
         .sub-title {
             font-size: 12px;
             margin-top: 30px;
@@ -601,8 +606,14 @@ header {
         }
     }
     img {
+        @media screen and (max-width: 350px) {
+            width: 60px;
+            bottom: 20px;
+            right: 10px;
+        }
         width: 80px;
         position: absolute;
+
         bottom: 20px;
         right: 20px;
     }
