@@ -66,6 +66,8 @@ import 'moment/locale/zh-cn';
 export default {
     layout: 'index',
     async asyncData(context) {
+        context.redirect(`/submit?instanceId=${10}`)
+        return
         try {
             const { data } = (await request.get('/v1/ssr/instance')).data
             return {instanceList: data}
@@ -79,6 +81,9 @@ export default {
         return {
 
         };
+    },
+    created() {
+
     },
     mounted() {
 
