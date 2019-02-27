@@ -56,8 +56,8 @@
         fixed: false,
         darkTheme: false,
         items: [
-          { icon: 'apps', title: 'Welcome', to: '/' },
-          { icon: 'bubble_chart', title: 'Inspire', to: '/inspire' }
+          { icon: 'apps', title: '求是潮ROP', to: '/' },
+          // { icon: 'bubble_chart', title: 'Inspire', to: '/inspire' }
         ],
         miniVariant: false,
         right: true,

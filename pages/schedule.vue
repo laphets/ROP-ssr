@@ -23,7 +23,7 @@
                         <v-radio
                             color="primary"
                             v-for="(interview, index1) in intent.interviews" :key="index1"
-                            :label="`${prase_time(interview.start_time)} ~ ${prase_time(interview.end_time)}`"
+                            :label="`${prase_time(interview.start_time)} ~ ${prase_time(interview.end_time)}  @ ${interview.location}`"
                             :value="`${intent.intent_id}#${interview.ID}`"
                         ></v-radio>
                         </v-radio-group>
@@ -123,12 +123,16 @@ export default {
             return moment(new Date(time)).format('LLL')
         },
         reject(intent_id) {
+            this.color = 'error';
+            this.snackbarText = `功能暂不支持`
+            this.snackbar = true;
             console.log(intent_id)
         },
         async submit(intent_id) {
             // this.dialog = true
             try {
                 const res = (await request.post(`/v1/ssr/join/${this.radioSelectList[intent_id]}`, {
+                    uid: this.$route.query.uid,
                     intents: [intent_id]
                 })).data
                 if(res.code != 0) {
