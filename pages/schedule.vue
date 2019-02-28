@@ -4,7 +4,7 @@
             <v-flex xs12 sm6 offset-sm3>
             <v-card>
                 <v-card-title primary-title>
-                <div v-if="(instance.intent_groups).length">
+                <div v-if="instance.intent_groups && (instance.intent_groups).length">
                     <h3 class="headline mb-0">{{instance.name}}同学您好:</h3>
                     <div>接下来请您为您的每个志愿选择一个合适的时间段参加面试~</div>
                 </div>
@@ -23,6 +23,7 @@
                         <v-radio
                             color="primary"
                             v-for="(interview, index1) in intent.interviews" :key="index1"
+                            v-if="interview.not_available!==1"
                             :label="`${prase_time(interview.start_time)} ~ ${prase_time(interview.end_time)}  @ ${interview.location}`"
                             :value="`${intent.intent_id}#${interview.ID}`"
                         ></v-radio>
@@ -34,7 +35,7 @@
 
                 <v-card-actions>
                 <v-btn @click="submit(intent.intent_id)" flat color="success">提交</v-btn>
-                <v-btn @click="reject(intent.intent_id)" flat color="error">拒绝</v-btn>
+                <v-btn @click="reject(intent.intent_id)" flat color="error">以上没有适合我的时间</v-btn>
                 </v-card-actions>
             </v-card>
             </v-flex>
@@ -100,10 +101,19 @@ export default {
     async asyncData (context) {
         // console.log(context)
         // console.log(context.query)
-        const { uid } = context.query
-        // console.log(this)
-        const { data } = ((await request.get(`/v1/ssr/schedule?uid=${uid}`)).data)
-        return { instance: data }
+        try {
+            const { uid } = context.query
+            // console.log(this)
+            const { data } = ((await request.get(`/v1/ssr/schedule?uid=${uid}`)).data)
+            if (!data) {
+                throw "No instance"
+            }
+            console.log(data.intent_groups[0].interviews.not_available)
+            return { instance: data }
+        } catch (error) {
+            return { instance: null }
+        }
+
     },
     data() {
         return {
@@ -122,11 +132,22 @@ export default {
         prase_time(time) {
             return moment(new Date(time)).format('LLL')
         },
-        reject(intent_id) {
-            this.color = 'error';
-            this.snackbarText = `功能暂不支持`
-            this.snackbar = true;
-            console.log(intent_id)
+        async reject(intent_id) {
+            try {
+                const res = (await request.post(`/v1/ssr/reject/${intent_id}`, {
+                    uid: this.$route.query.uid,
+                })).data
+                if(res.code != 0) {
+                    throw res.data
+                }
+                this.color = 'success';
+                this.snackbarText = '面试取消成功，我们将稍后再为您安排面试~'
+                this.snackbar = true;
+            } catch (error) {
+                this.color = 'error';
+                this.snackbarText = `面试取消失败: ${error}`
+                this.snackbar = true;
+            }
         },
         async submit(intent_id) {
             // this.dialog = true
